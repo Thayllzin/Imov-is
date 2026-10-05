@@ -8,8 +8,14 @@ import { createClient, SupabaseClient } from '@supabase/supabase-js';
  * NUNCA coloque a service_role key no frontend.
  */
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL as string | undefined;
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY as string | undefined;
+const DEFAULT_SUPABASE_URL = 'https://tnvhmfybdvnnbodhscyl.supabase.co';
+const DEFAULT_SUPABASE_ANON_KEY =
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRudmhtZnliZHZubmJvZGhzY3lsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTEyMzAzMjcsImV4cCI6MjEwNjgwNjMyN30.B9GbKw7S50BJ7VJj9jSKVtrhdv_JiM8x1WE0ug5c5yc';
+
+const supabaseUrl =
+  (import.meta.env.VITE_SUPABASE_URL as string | undefined) || DEFAULT_SUPABASE_URL;
+const supabaseAnonKey =
+  (import.meta.env.VITE_SUPABASE_ANON_KEY as string | undefined) || DEFAULT_SUPABASE_ANON_KEY;
 
 export const STORAGE_BUCKET = 'property-images';
 

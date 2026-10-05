@@ -193,6 +193,17 @@ export async function getProperties(filters?: PropertyFilters): Promise<Property
   const { data, error } = await query.order('created_at', { ascending: false });
 
   if (error) {
+    // Caso a tabela ainda não tenha sido criada no SQL Editor do Supabase, usa o fallback local
+    if (
+      error.code === '42P01' ||
+      error.message.includes('does not exist') ||
+      error.message.includes('schema cache')
+    ) {
+      console.warn(
+        'Tabela properties ainda não encontrada no Supabase. Exibindo dados de demonstração até que supabase/schema.sql seja executado.'
+      );
+      return applyClientFilters(getLocalProperties(), filters);
+    }
     throw new Error(`Erro ao carregar imóveis do Supabase: ${error.message}`);
   }
 
@@ -218,6 +229,14 @@ export async function getFeaturedProperties(limit = 4): Promise<Property[]> {
     .limit(limit);
 
   if (error) {
+    if (
+      error.code === '42P01' ||
+      error.message.includes('does not exist') ||
+      error.message.includes('schema cache')
+    ) {
+      const all = applyClientFilters(getLocalProperties(), { status: 'all_public' });
+      return all.filter((p) => p.featured).slice(0, limit);
+    }
     throw new Error(`Erro ao buscar imóveis em destaque: ${error.message}`);
   }
 
@@ -259,6 +278,15 @@ export async function getPropertyBySlugOrId(slugOrId: string): Promise<Property 
   const { data, error } = await query.maybeSingle();
 
   if (error) {
+    if (
+      error.code === '42P01' ||
+      error.message.includes('does not exist') ||
+      error.message.includes('schema cache')
+    ) {
+      const local = getLocalProperties();
+      const found = local.find((p) => p.slug === slugOrId || p.id === slugOrId);
+      return found ? normalizePropertyImages(found) : null;
+    }
     throw new Error(`Erro ao carregar detalhes do imóvel: ${error.message}`);
   }
 
