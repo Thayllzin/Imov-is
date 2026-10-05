@@ -1,0 +1,6 @@
+{
+  "name": "Marcela Cardoso Imóveis",
+  "description": "Plataforma imobiliária premium para compra, venda e locação de imóveis exclusivos com gestão administrativa completa.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
